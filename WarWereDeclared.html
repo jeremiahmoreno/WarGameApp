@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>
+
+            //This section creates the parameters for the deck, creates the deck in array, and shuffles it:
+            class CardDeck
+            {
+                constructor()
+                {
+                    this.cardDeck = [];
+                    this.createDeck();
+                    this.shuffleDeck();
+                }
+
+                //This method implements above and creates the deck:
+                createDeck()
+                {
+                    const cardSuits = ['Spades', 'Hearts', 'Clubs', 'Diamonds'];
+                    const cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
+
+                    for(let i = 0; i < cardSuits.length; i++)
+                    {
+                        for(let j = 0; j < cardValues.length; j++)
+                        {
+                            let card = {name: `${cardValues[j]} of ${cardSuits[i]}`, value: j};
+                            //Now that the cards are created, they get pushed to the the cardDeck array.
+                            this.cardDeck.push(card);
+                        }
+                    }
+                }
+
+                //This method will shuffle the cardDeck array:
+                /*I used the Fisher-Yates shuffle algorithm: 
+                https://www.w3docs.com/snippets/javascript/how-to-randomize-shuffle-a-javascript-array.html*/
+                shuffleDeck()
+                {
+                    const cardDeck = this.cardDeck;
+                    let currentCardOrder = cardDeck.length
+                    let randomCardOrder = 0;
+
+                    while(currentCardOrder != 0)
+                    {
+                        randomCardOrder = Math.floor(Math.random() * currentCardOrder);
+                        currentCardOrder--;
+
+                        //Swap random and current elements:
+                        [cardDeck[currentCardOrder], cardDeck[randomCardOrder]] = [cardDeck[randomCardOrder], cardDeck[currentCardOrder]];
+                    }  
+                }
+
+                //This creates a new, shuffled deck.
+                dealDeck()
+                {
+                    return this.cardDeck();
+                }
+            }
+
+            //The deck is done and appears to work. Woo hoo!
+        
+            //Now, to make a Player class:
+            class Player
+                {
+                    constructor(cardDeck)
+                    {
+                        let playerDeck = [];
+                        this.setPlayerDeck(cardDeck);
+                    }
+
+                    playCard()
+                    {
+                        return this.playerDeck.pop();
+                    }
+
+                    setPlayerDeck(cardDeck)
+                    {
+                        this.playerDeck = cardDeck;
+                    }
+                }
+
+            function playGame()
+            {
+                console.log('Shuffling Deck...')
+                console.log('Dealing Cards...');
+                console.log('');
+                
+                const warDeck = new CardDeck();
+
+                //This creates the players and splits the deck in half, creating 2 new arrays of 26 cards each:                
+                
+                
+                const playerOne = new Player(warDeck.cardDeck.splice(0,26));
+                const playerTwo = new Player(warDeck.cardDeck.splice(0,26));
+
+                let playerOnePoints = 0
+                let playerTwoPoints = 0
+
+                while(playerOne.playerDeck.length > 0 && playerTwo.playerDeck.length > 0)
+                {
+                    let playerOneCard = playerOne.playCard();
+                    let playerTwoCard = playerTwo.playCard();
+                    console.log('Player One Plays ' + playerOneCard.name);
+                    console.log('Player Two Plays ' + playerTwoCard.name);
+
+                    if(playerOneCard.value > playerTwoCard.value)
+                    {
+                        ++playerOnePoints;  
+                        console.log('Player ONE Wins the Round.');                  
+                    }
+                    else if(playerOneCard.value < playerTwoCard.value)
+                        {
+                            ++playerTwoPoints;
+                            console.log('Player TWO Wins the Round.'); 
+                        }
+                    else
+                        {
+                            console.log('TIE!')
+                        }
+                    console.log('Player One Has ' + playerOnePoints + ' Points.')
+                    console.log('Player Two Has ' + playerTwoPoints + ' Points.')
+                    console.log('');
+                }
+                console.log('Player One Finishes With ' + playerOnePoints + ' Points.');
+                console.log('Player Two Finishes With ' + playerTwoPoints + ' Points.');
+                if(playerOnePoints > playerTwoPoints)
+                {
+                    console.log('Player ONE Wins!!!');
+                }
+                else if(playerTwoPoints > playerOnePoints)
+                {  
+                    console.log('Player TWO Wins!!!');
+                }
+                else
+                {
+                    console.log('TIE GAME!!!');
+                }
+                console.log('');
+                console.log('Thank you for playing. Click refresh to play again.')
+            }
+
+            playGame();     
+        </script>
+    </body>
+</html>
